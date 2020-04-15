@@ -33,3 +33,41 @@ class GroupHelper:
         wd.find_element_by_name("delete").click()
         self.return_to_groups_page()
 
+    def update_first_group(self, group):
+        wd = self.app.wd
+        # select first group
+        wd.find_element_by_name("selected[]").click()
+        # edit data
+        wd.find_element_by_name("edit").click()
+        # edit name
+        wd.find_element_by_name("group_name").click()
+        wd.find_element_by_name("group_name").clear()
+        wd.find_element_by_name("group_name").send_keys(group.name)
+        # edit header
+        wd.find_element_by_name("group_header").click()
+        wd.find_element_by_name("group_header").clear()
+        wd.find_element_by_name("group_header").send_keys(group.header)
+        # edit footer
+        wd.find_element_by_name("group_footer").click()
+        wd.find_element_by_name("group_footer").clear()
+        wd.find_element_by_name("group_footer").send_keys(group.footer)
+        # submit updating
+        wd.find_element_by_name("update").click()
+        self.return_to_groups_page()
+
+    def add_new_group(self, group):
+        wd = self.app.wd
+        # add data
+        wd.find_element_by_name("new").click()
+        # add name
+        wd.find_element_by_name("group_name").click()
+        wd.find_element_by_name("group_name").send_keys(group.name)
+        # add header
+        wd.find_element_by_name("group_header").click()
+        wd.find_element_by_name("group_header").send_keys(group.header)
+        # add footer
+        wd.find_element_by_name("group_footer").click()
+        wd.find_element_by_name("group_footer").send_keys(group.footer)
+        # submit updating
+        wd.find_element_by_name("submit").click()
+        self.return_to_groups_page()
