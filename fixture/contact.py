@@ -11,11 +11,17 @@ class ContactHelper:
 
     def create(self, contact):
         wd = self.app.wd
+        self.open_contact_page()
         # init contact creation
         wd.find_element_by_link_text("add new").click()
         self.fill_contact_form(contact)
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+
+    def open_contact_page(self):
+        wd = self.app.wd
+        if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_name("searchstring")) > 0):
+            wd.find_element_by_link_text("home").click()
 
     def fill_contact_form(self, contact):
         wd = self.app.wd
@@ -61,6 +67,7 @@ class ContactHelper:
 
     def delete_first_contact(self):
         wd = self.app.wd
+        self.open_contact_page()
         self.select_first_contact()
         # submit deletion
         wd.find_element_by_name("Delete").click()
