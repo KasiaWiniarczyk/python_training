@@ -1,7 +1,7 @@
 from selenium.webdriver.support.select import Select
 from model.contact import Contact
+from fixture.db import DbFixture
 import re
-
 
 class ContactHelper:
 
@@ -294,3 +294,25 @@ class ContactHelper:
         work = re.search("W: (.*)", text).group(1)
         phone2 = re.search("P: (.*)", text).group(1)
         return Contact(home=home, work=work, mobile=mobile, phone2=phone2)
+
+    def add_contact_for_group(self, contact_id, group_id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[id='%s']" % contact_id).click()
+        wd.find_element_by_name("to_group").click()
+        wd.find_element_by_xpath("//option[@value='%s']//following::input[@value='Add to']" % group_id).click()
+        self.contact_cache = None
+
+
+    def delete_contact_from_group(self, contact_id, group_id):
+        wd = self.app.wd
+        contact_in_groups = DbFixture.get_contacts_in_group_list
+        if contact_in_groups is not None:
+            wd.find_element_by_xpath("//input[@value='%s']//following::td[6]" % contact_id).click()
+            sleep(2)
+            wd.find_element_by_xpath("//i/a").click()
+            sleep(1)
+            wd.find_element_by_css_selector("input[id='%s']" % contact_id).click()
+            wd.find_element_by_name("remove").click()
+            self.contact_cache = None
+        else:
+            self.add_contact_for_group(contact_id, group_id)
